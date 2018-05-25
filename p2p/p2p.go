@@ -1,6 +1,8 @@
 package p2p
 
 import (
+	"sync"
+
 	p2phost "gx/ipfs/QmNmJZL7FQySMtE2BQuLMuZg2EB2CLEunJJUSVSc9YnnbV/go-libp2p-host"
 	pstore "gx/ipfs/QmXauCuJzmzapetmC6W4TuDJLL1yFFrVzSHoWv8YdbmnxH/go-libp2p-peerstore"
 	peer "gx/ipfs/QmZoWKhxUmZ2seW4BzX6fJkNR8hh9PsGModr7q171yq2SS/go-libp2p-peer"
@@ -25,9 +27,11 @@ func NewP2P(identity peer.ID, peerHost p2phost.Host, peerstore pstore.Peerstore)
 
 		Listeners: &ListenerRegistry{
 			Listeners: map[listenerKey]Listener{},
+			lk:        &sync.Mutex{},
 		},
 		Streams: &StreamRegistry{
 			Streams: map[uint64]*Stream{},
+			lk:      &sync.Mutex{},
 		},
 	}
 }
